@@ -10,9 +10,9 @@ services:
         # монтируем директории, слева директории на основной машине, справа - куда они монтируются в контейнере
         volumes:
             - ./hosts:/etc/nginx/conf.d # на всякий случай
-            - ./php-ini:/usr/local/etc/php/custom.d # подробнее тут: https://sheershoff.ru/pravki-v-php-ini-v-docker-obraze-php-pri-pomoshhi-docker-compose/
             - /var/run/docker.sock:/tmp/docker.sock:ro
             - /path/to/vhost.d:/etc/nginx/vhost.d:ro
+
 
     gateway:
         image: jwilder/whoami
@@ -56,14 +56,14 @@ services:
     ### Дополнительные модули
     db:
         image: mysql:8.0
-        ports: 
+        ports:
             - "6033:3306"
         command: --default-authentication-plugin=mysql_native_password
         environment:
             MYSQL_DATABASE: mainDB
             MYSQL_USER: user
             MYSQL_PASSWORD: test
-            MYSQL_ROOT_PASSWORD: test 
+            MYSQL_ROOT_PASSWORD: test
         volumes:
             - ./dump:/docker-entrypoint-initdb.d
             - ./conf:/etc/mysql/conf.d
@@ -72,7 +72,7 @@ services:
             - default
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        links: 
+        links:
             - db:db
         ports:
             - 8000:80 # Порт для вывода phpmyadmin (реальный : виртуальный)
@@ -82,7 +82,7 @@ services:
             MYSQL_ROOT_PASSWORD: test
     ###
 
-    
+
 volumes:
     persistent:
         
