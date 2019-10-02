@@ -1,9 +1,10 @@
 version: "3.1"
 services:
+    ### Маршрутизация нескольких проектов. Желательно удалить, если в контейнере будет не больше одного проекта
     nginx-proxy:
         image: jwilder/nginx-proxy
         ports:
-            - "80:80"
+            - "80:80" # Порт для вывода проектов (реальный : виртуальный)
         volumes:
             - /var/run/docker.sock:/tmp/docker.sock:ro
             - /path/to/vhost.d:/etc/nginx/vhost.d:ro
@@ -12,29 +13,33 @@ services:
         image: jwilder/whoami
         environment:
             - VIRTUAL_HOST=localhost # этот файл нужен всего лишь для работы с проектами через хост localhost. Как настроить можно посмотреть вот тут http://qaru.site/questions/1256635/docker-nginx-proxy-how-to-route-traffic-to-different-container-using-path-and-not-hostname
+    ###
 
+    ### Проекты
     comagic:
         build: .
         volumes:
-            - ./www/comagic:/var/www/html/
+            - ./www/comagic:/var/www/html/ # Путь к проекту на реальной машине : путь к проекту на виртуальной машине
         links:
-            - db
+            - db # зависимость от дополнительного модуля описанного ниже
         networks:
             - default
         environment:
-            - VIRTUAL_HOST=comagic.local
+            - VIRTUAL_HOST=comagic.local # ограничение на показ. Необходимо указать виртуальные хосты, где будет разрешен показ. Если ничего не указывать, то сайт будет выводиться на всех хостах
 
     komstroyproekt:
         build: .
         volumes:
-            - ./www/komstroyproekt:/var/www/html/
+            - ./www/komstroyproekt:/var/www/html/ # Путь к проекту на реальной машине : путь к проекту на виртуальной машине
         links:
-            - db
+            - db # зависимость описанного ниже
         networks:
             - default
         environment:
-            - VIRTUAL_HOST=komstroyproekt.local
+            - VIRTUAL_HOST=komstroyproekt.local # ограничение на показ. Необходимо указать виртуальные хосты, где будет разрешен показ. Если ничего не указывать, то сайт будет выводиться на всех хостах
+    ###
 
+    ### Дополнительные модули
     db:
         image: mysql:8.0
         ports: 
@@ -56,11 +61,12 @@ services:
         links: 
             - db:db
         ports:
-            - 8000:80
+            - 8000:80 # Порт для вывода phpmyadmin (реальный : виртуальный)
         environment:
             MYSQL_USER: user
             MYSQL_PASSWORD: test
-            MYSQL_ROOT_PASSWORD: test 
+            MYSQL_ROOT_PASSWORD: test
+    ###
 
     
 volumes:
