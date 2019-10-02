@@ -2,41 +2,55 @@ version: "3.1"
 services:
     ### Маршрутизация нескольких проектов. Желательно удалить, если в контейнере будет не больше одного проекта
     nginx-proxy:
-        image: jwilder/nginx-proxy
+        image: jwilder/nginx-proxy # или nginx:latest
+        # Порты для вывода проектов (реальный : виртуальный)
         ports:
-            - "80:80" # Порт для вывода проектов (реальный : виртуальный)
+            - "80:80"
+            - "443:443"
+        # монтируем директории, слева директории на основной машине, справа - куда они монтируются в контейнере
         volumes:
+            - ./hosts:/etc/nginx/conf.d # на всякий случай
+            - ./php-ini:/usr/local/etc/php/custom.d # подробнее тут: https://sheershoff.ru/pravki-v-php-ini-v-docker-obraze-php-pri-pomoshhi-docker-compose/
             - /var/run/docker.sock:/tmp/docker.sock:ro
             - /path/to/vhost.d:/etc/nginx/vhost.d:ro
 
     gateway:
         image: jwilder/whoami
         environment:
-            - VIRTUAL_HOST=localhost # этот файл нужен всего лишь для работы с проектами через хост localhost. Как настроить можно посмотреть вот тут http://qaru.site/questions/1256635/docker-nginx-proxy-how-to-route-traffic-to-different-container-using-path-and-not-hostname
+            # этот файл нужен всего лишь для работы с проектами через хост localhost. Как настроить можно посмотреть вот тут http://qaru.site/questions/1256635/docker-nginx-proxy-how-to-route-traffic-to-different-container-using-path-and-not-hostname
+            - VIRTUAL_HOST=localhost
     ###
 
     ### Проекты
     comagic:
         build: .
+        # монтируем директории, слева директории на основной машине, справа - куда они монтируются в контейнере
         volumes:
-            - ./www/comagic:/var/www/html/ # Путь к проекту на реальной машине : путь к проекту на виртуальной машине
+            # Путь к проекту на реальной машине : путь к проекту на виртуальной машине
+            - ./www/comagic:/var/www/html/
+        # зависимость описанного ниже
         links:
-            - db # зависимость от дополнительного модуля описанного ниже
+            - db
         networks:
             - default
+        # ограничение на показ. Необходимо указать виртуальные хосты, где будет разрешен показ. Если ничего не указывать, то сайт будет выводиться на всех хостах
         environment:
-            - VIRTUAL_HOST=comagic.local # ограничение на показ. Необходимо указать виртуальные хосты, где будет разрешен показ. Если ничего не указывать, то сайт будет выводиться на всех хостах
+            - VIRTUAL_HOST=comagic.local
 
     komstroyproekt:
         build: .
+        # монтируем директории, слева директории на основной машине, справа - куда они монтируются в контейнере
         volumes:
-            - ./www/komstroyproekt:/var/www/html/ # Путь к проекту на реальной машине : путь к проекту на виртуальной машине
+            # Путь к проекту на реальной машине : путь к проекту на виртуальной машине
+            - ./www/komstroyproekt:/var/www/html/
+        # зависимость описанного ниже
         links:
-            - db # зависимость описанного ниже
+            - db
         networks:
             - default
+        # ограничение на показ. Необходимо указать виртуальные хосты, где будет разрешен показ. Если ничего не указывать, то сайт будет выводиться на всех хостах
         environment:
-            - VIRTUAL_HOST=komstroyproekt.local # ограничение на показ. Необходимо указать виртуальные хосты, где будет разрешен показ. Если ничего не указывать, то сайт будет выводиться на всех хостах
+            - VIRTUAL_HOST=komstroyproekt.local
     ###
 
     ### Дополнительные модули
