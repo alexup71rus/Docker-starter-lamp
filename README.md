@@ -1,22 +1,22 @@
 # docker-lamp
 
-Docker стартовый проект Apache, MySql 8.0, PhpMyAdmin и Php
+Docker СЃС‚Р°СЂС‚РѕРІС‹Р№ РїСЂРѕРµРєС‚ Apache, MySql 8.0, PhpMyAdmin Рё Php
 
-- Вы можете использовать MariaDB 10.1 если поставите тег `mariadb-10.1` - contribution made by [luca-vercelli](https://github.com/luca-vercelli)
-- Вы можете использовать MySql 5.7 если поставите тег `mysql5.7`
+- Р’С‹ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ MariaDB 10.1 РµСЃР»Рё РїРѕСЃС‚Р°РІРёС‚Рµ С‚РµРі `mariadb-10.1` - contribution made by [luca-vercelli](https://github.com/luca-vercelli)
+- Р’С‹ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ MySql 5.7 РµСЃР»Рё РїРѕСЃС‚Р°РІРёС‚Рµ С‚РµРі `mysql5.7`
 
-Я использую docker-compose как фоновый процесс (флаг `-d`) для запуска контейнера:
+РЇ РёСЃРїРѕР»СЊР·СѓСЋ docker-compose РєР°Рє С„РѕРЅРѕРІС‹Р№ РїСЂРѕС†РµСЃСЃ (С„Р»Р°Рі `-d`) РґР»СЏ Р·Р°РїСѓСЃРєР° РєРѕРЅС‚РµР№РЅРµСЂР°:
 
 ```
 docker-compose up -d
 ```
 
-Открыть phpmyadmin можно через порт 8000.
+РћС‚РєСЂС‹С‚СЊ phpmyadmin РјРѕР¶РЅРѕ С‡РµСЂРµР· РїРѕСЂС‚ 8000.
 
-`[http://localhost:8000](http://localhost:8000)`
+`http://localhost:8000`
 
-Запустить mysql клиент:
+Р—Р°РїСѓСЃС‚РёС‚СЊ mysql РєР»РёРµРЅС‚:
 
 `docker-compose exec db mysql -u root -p` 
 
-Всё!
+Р’СЃС‘!
