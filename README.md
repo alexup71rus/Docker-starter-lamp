@@ -2,7 +2,7 @@
 
 Docker стартовый проект Apache, MySql 8.0, PhpMyAdmin и Php
 
-- Вы можете использовать MariaDB 10.1 если поставите тег `mariadb-10.1` - contribution made by [luca-vercelli](https://github.com/luca-vercelli)
+- Вы можете использовать MariaDB 10.1 если поставите тег `mariadb-10.1`
 - Вы можете использовать MySql 5.7 если поставите тег `mysql5.7`
 
 После изменений в версиях компонентов (например смены версии php) нужно удалить старые зависимости командами `docker rm $(docker images -q) --force` и `docker rmi $(docker images -q) --force` и заново сделать `docker-compose up`. При возникновении ошибок введите `docker-compose down`.
@@ -24,3 +24,5 @@ docker-compose up -d
 Запустить mysql клиент:
 
 `docker-compose exec db mysql -u root -p` 
+
+Contribution made by [luca-vercelli](https://github.com/luca-vercelli)
