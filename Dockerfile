@@ -6,3 +6,5 @@ RUN apt-get update && apt-get install -y \
         git \
         libmcrypt-dev \
     && docker-php-ext-install iconv mcrypt mbstring mysqli pdo_mysql
+
+COPY ./init.sql /docker-entrypoint-initdb.d/
