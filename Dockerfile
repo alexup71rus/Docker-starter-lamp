@@ -5,4 +5,4 @@ RUN apt-get update && apt-get install -y \
         wget \
         git \
         libmcrypt-dev \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt mbstring mysqli pdo_mysql
+    && docker-php-ext-install iconv mcrypt mbstring mysqli pdo_mysql

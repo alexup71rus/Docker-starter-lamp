@@ -12,13 +12,6 @@ services:
             - ./hosts:/etc/nginx/conf.d # на всякий случай
             - /var/run/docker.sock:/tmp/docker.sock:ro
             - /path/to/vhost.d:/etc/nginx/vhost.d:ro
-
-
-    gateway:
-        image: jwilder/whoami
-        environment:
-            # этот файл нужен всего лишь для работы с проектами через хост localhost. Как настроить можно посмотреть вот тут http://qaru.site/questions/1256635/docker-nginx-proxy-how-to-route-traffic-to-different-container-using-path-and-not-hostname
-            - VIRTUAL_HOST=localhost
     ###
 
     ### Проекты
@@ -60,16 +53,17 @@ services:
             - "6033:3306"
         command: --default-authentication-plugin=mysql_native_password
         environment:
-            MYSQL_DATABASE: mainDB
-            MYSQL_USER: user
-            MYSQL_PASSWORD: test
-            MYSQL_ROOT_PASSWORD: test
+            MYSQL_DATABASE: mysql
+            MYSQL_USER: mysql
+            MYSQL_PASSWORD: mysql
+            MYSQL_ROOT_PASSWORD: mysql
         volumes:
             - ./dump:/docker-entrypoint-initdb.d
             - ./conf:/etc/mysql/conf.d
-            - persistent:/var/lib/mysql
+            - ./data_mysql:/var/lib/mysql
         networks:
             - default
+
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         links:
@@ -77,12 +71,8 @@ services:
         ports:
             - 8000:80 # Порт для вывода phpmyadmin (реальный : виртуальный)
         environment:
-            MYSQL_USER: user
-            MYSQL_PASSWORD: test
-            MYSQL_ROOT_PASSWORD: test
+            MYSQL_USER: mysql
+            MYSQL_PASSWORD: mysql
+            MYSQL_ROOT_PASSWORD: mysql
     ###
-
-
-volumes:
-    persistent:
         
